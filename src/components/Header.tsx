@@ -1,6 +1,7 @@
-import { Search, Bell } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Search, Bell } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import vaneImage from "@/assets/vane.jpeg";
 
 export default function Header() {
   return (
@@ -8,9 +9,9 @@ export default function Header() {
       {/* Search Bar */}
       <div className="relative w-[400px]">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-        <Input 
-          type="text" 
-          placeholder="Buscar paciente, ID o tratamiento..." 
+        <Input
+          type="text"
+          placeholder="Buscar paciente, ID o tratamiento..."
           className="pl-10 bg-slate-50 border-transparent hover:border-slate-200 focus-visible:ring-1 focus-visible:ring-slate-300 focus-visible:border-slate-300 transition-colors rounded-xl h-10 text-sm"
         />
       </div>
@@ -30,14 +31,20 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <div className="text-right">
             <p className="text-sm font-semibold text-slate-800">Dra. Vanessa</p>
-            <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">Odontólogo General</p>
+            <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+              Odontólogo General
+            </p>
           </div>
           <Avatar className="w-10 h-10 border-2 border-white shadow-sm">
-            <AvatarImage src="https://i.pravatar.cc/150?u=dra-vanessa" alt="Dra. Vanessa" />
+            {/*<AvatarImage src={vaneImage} alt="Dra. Vanessa" />*/}
+            <AvatarImage
+              src="https://i.pravatar.cc/150?u=dra-vanessa"
+              alt="Dra. Vanessa"
+            />
             <AvatarFallback>DV</AvatarFallback>
           </Avatar>
         </div>
       </div>
     </header>
-  )
+  );
 }
