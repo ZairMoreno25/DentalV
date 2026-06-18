@@ -1,0 +1,30 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# CodeGraph data files — local to each machine, not for committing.
+# Ignore everything in .codegraph/ except this file itself, so transient
+# files (the database, daemon.pid, sockets, logs) never show up in git.
+.codegraph/*
+!.codegraph/.gitignore
