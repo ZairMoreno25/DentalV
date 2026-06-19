@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom"
-import { ClipboardList, Users, BriefcaseMedical, Building2, Settings } from "lucide-react"
+import { ClipboardList, Users, BriefcaseMedical, Building2, Settings, LayoutDashboard } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
+  { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
   { name: "Historiales", path: "/historiales", icon: ClipboardList },
   { name: "Pacientes", path: "/pacientes", icon: Users },
   { name: "Doctores", path: "/doctores", icon: BriefcaseMedical },

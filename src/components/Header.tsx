@@ -36,11 +36,7 @@ export default function Header() {
             </p>
           </div>
           <Avatar className="w-10 h-10 border-2 border-white shadow-sm">
-            {/*<AvatarImage src={vaneImage} alt="Dra. Vanessa" />*/}
-            <AvatarImage
-              src="https://i.pravatar.cc/150?u=dra-vanessa"
-              alt="Dra. Vanessa"
-            />
+            <AvatarImage src={vaneImage} alt="Dra. Vanessa" />
             <AvatarFallback>DV</AvatarFallback>
           </Avatar>
         </div>

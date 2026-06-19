@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
 interface StatusBadgeProps {
-  status: "Completado" | "En Tratamiento" | "Firma Pendiente" | "Inactivo"
+  status: "Completado" | "En Tratamiento" | "Firma Pendiente" | "Inactivo" | "CONFIRMADO" | "EN ESPERA" | "NO ASISTIÓ"
 }
 
 export default function StatusBadge({ status }: StatusBadgeProps) {
@@ -11,6 +11,9 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
     "En Tratamiento": "bg-blue-100 text-blue-700 hover:bg-blue-100/80",
     "Firma Pendiente": "bg-red-100 text-red-700 hover:bg-red-100/80",
     "Inactivo": "bg-slate-100 text-slate-600 hover:bg-slate-100/80",
+    "CONFIRMADO": "bg-teal-100 text-teal-700 hover:bg-teal-100/80",
+    "EN ESPERA": "bg-blue-100 text-blue-700 hover:bg-blue-100/80",
+    "NO ASISTIÓ": "bg-slate-100 text-slate-600 hover:bg-slate-100/80",
   }
 
   return (

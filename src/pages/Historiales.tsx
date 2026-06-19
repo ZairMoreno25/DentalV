@@ -1,18 +1,27 @@
+import { useState } from "react"
 import { Plus, User, CalendarCheck, CalendarOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import StatCard from "@/components/StatCard"
 import PatientsTable from "@/components/PatientsTable"
+import NuevoRegistroModal from "@/components/NuevoRegistroModal"
 
 export default function Historiales() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
     <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500">
+      <NuevoRegistroModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Historiales Clínicos</h1>
           <p className="text-slate-500 mt-1 text-sm font-medium">Gestión y revisión de registros de pacientes activos e inactivos.</p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm shadow-blue-200 gap-2 px-5 rounded-lg h-10 transition-all active:scale-95">
+        <Button 
+          onClick={() => setIsModalOpen(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm shadow-blue-200 gap-2 px-5 rounded-lg h-10 transition-all active:scale-95"
+        >
           <Plus className="w-5 h-5" />
           Nuevo Registro
         </Button>
