@@ -4,7 +4,7 @@ import Header from "@/components/Header"
 
 export default function DashboardLayout() {
   return (
-    <div className="flex h-screen bg-slate-50/50 overflow-hidden font-sans">
+    <div className="flex h-screen bg-slate-50/50 dark:bg-[#15171C] overflow-hidden font-sans transition-colors">
       <Sidebar />
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         <Header />

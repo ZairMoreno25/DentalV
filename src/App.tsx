@@ -14,6 +14,8 @@ function App() {
           <Route path="pacientes" element={<div className="p-8">Pacientes View</div>} />
           <Route path="doctores" element={<div className="p-8">Doctores View</div>} />
           <Route path="clinicas" element={<div className="p-8">Clínicas View</div>} />
+          <Route path="metricas" element={<div className="p-8">Métricas View</div>} />
+          <Route path="compras" element={<div className="p-8">Compras View</div>} />
           <Route path="ajustes" element={<div className="p-8">Ajustes View</div>} />
         </Route>
       </Routes>

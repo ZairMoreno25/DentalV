@@ -1,17 +1,21 @@
 import { useRef } from "react";
 import { createPortal } from "react-dom";
-import { X, User, Calendar, Phone, Mail, Clock } from "lucide-react";
+import { X, User, Calendar, Phone, Mail, Clock, FileText, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 interface NuevaCitaModalProps {
   isOpen: boolean;
   onClose: () => void;
+  mode?: 'create' | 'edit' | 'view';
+  initialData?: any;
 }
 
 export default function NuevaCitaModal({
   isOpen,
   onClose,
+  mode = 'create',
+  initialData,
 }: NuevaCitaModalProps) {
   if (!isOpen) return null;
 
@@ -37,9 +41,15 @@ export default function NuevaCitaModal({
 
         {/* Header */}
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-blue-600">Nueva Cita</h2>
+          <h2 className="text-2xl font-bold text-blue-600">
+            {mode === 'create' ? 'Nueva Cita' : mode === 'edit' ? 'Editar Cita' : 'Detalles de Cita'}
+          </h2>
           <p className="text-slate-500 text-sm mt-1 font-medium">
-            Complete la información para agendar un nuevo paciente.
+            {mode === 'create' 
+              ? 'Complete la información para agendar un nuevo paciente.' 
+              : mode === 'edit' 
+                ? 'Edite la información de la cita seleccionada.' 
+                : 'Información detallada de la cita agendada.'}
           </p>
         </div>
 
@@ -53,6 +63,8 @@ export default function NuevaCitaModal({
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <Input
+                defaultValue={initialData?.patient?.name || ""}
+                readOnly={mode === 'view'}
                 placeholder="Escriba aqui"
                 className="pl-9 bg-white/70 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl"
               />
@@ -70,9 +82,10 @@ export default function NuevaCitaModal({
                 <Input 
                   type="tel"
                   maxLength={10}
+                  readOnly={mode === 'view'}
                   placeholder="0000000000"
                   onChange={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
+                    if (mode !== 'view') e.target.value = e.target.value.replace(/\D/g, "");
                   }}
                   className="pl-9 bg-white/70 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl" 
                 />
@@ -89,6 +102,7 @@ export default function NuevaCitaModal({
                 <Input
                   placeholder="ejemplo@correo.com"
                   type="email"
+                  readOnly={mode === 'view'}
                   className="pl-9 bg-white/70 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl"
                 />
               </div>
@@ -99,7 +113,9 @@ export default function NuevaCitaModal({
             {/* Género */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700">Género</label>
-              <select className="w-full h-11 px-3 bg-white/70 border border-white/40 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 transition-colors rounded-xl text-sm text-slate-700 shadow-sm appearance-none">
+              <select 
+                disabled={mode === 'view'}
+                className="w-full h-11 px-3 bg-white/70 border border-white/40 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 transition-colors rounded-xl text-sm text-slate-700 shadow-sm appearance-none disabled:opacity-70 disabled:cursor-not-allowed">
                 <option value="">Seleccione</option>
                 <option value="m">Masculino</option>
                 <option value="f">Femenino</option>
@@ -115,7 +131,9 @@ export default function NuevaCitaModal({
                 type="number"
                 min={0}
                 max={100}
+                readOnly={mode === 'view'}
                 onInput={(e) => {
+                  if (mode === 'view') return;
                   const val = e.currentTarget.value;
                   if (Number(val) > 100) {
                     e.currentTarget.value = val.slice(0, -1);
@@ -140,6 +158,7 @@ export default function NuevaCitaModal({
                 <Input
                   placeholder="dd/mm/aaaa"
                   type="date"
+                  readOnly={mode === 'view'}
                   className="pl-9 bg-white/70 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl text-slate-700"
                 />
               </div>
@@ -157,6 +176,8 @@ export default function NuevaCitaModal({
                     type="text"
                     placeholder="12"
                     maxLength={2}
+                    readOnly={mode === 'view'}
+                    defaultValue={initialData?.time ? initialData.time.split(':')[0] : ''}
                     className="w-6 text-center bg-transparent border-none outline-none focus:ring-0 p-0 text-sm font-medium"
                     onChange={(e) => {
                       let val = e.target.value.replace(/\D/g, "");
@@ -182,6 +203,8 @@ export default function NuevaCitaModal({
                     type="text"
                     placeholder="00"
                     maxLength={2}
+                    readOnly={mode === 'view'}
+                    defaultValue={initialData?.time ? initialData.time.split(':')[1].split(' ')[0] : ''}
                     className="w-6 text-center bg-transparent border-none outline-none focus:ring-0 p-0 text-sm font-medium"
                     onChange={(e) => {
                       let val = e.target.value.replace(/\D/g, "");
@@ -198,7 +221,10 @@ export default function NuevaCitaModal({
                   />
                 </div>
                 <div className="w-[1px] h-5 bg-slate-300 mx-1" />
-                <select className="bg-transparent border-none outline-none text-xs font-semibold text-slate-600 cursor-pointer pr-1 focus:ring-0">
+                <select 
+                  disabled={mode === 'view'}
+                  defaultValue={initialData?.time ? initialData.time.split(' ')[1] : 'AM'}
+                  className="bg-transparent border-none outline-none text-xs font-semibold text-slate-600 cursor-pointer pr-1 focus:ring-0 disabled:opacity-70 disabled:cursor-not-allowed">
                   <option value="AM">AM</option>
                   <option value="PM">PM</option>
                 </select>
@@ -213,23 +239,43 @@ export default function NuevaCitaModal({
             </label>
             <textarea
               placeholder="Describa el motivo de la consulta o notas adicionales..."
+              readOnly={mode === 'view'}
+              defaultValue={initialData?.procedure || ""}
               className="w-full p-3 bg-white/70 border border-white/40 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 transition-colors rounded-xl text-sm text-slate-700 shadow-sm min-h-[100px] resize-none"
             />
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="flex justify-end items-center gap-3 mt-8">
-          <Button
-            variant="ghost"
-            onClick={onClose}
-            className="hover:bg-slate-200/50 text-slate-700 font-semibold"
-          >
-            Cancelar
-          </Button>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm shadow-blue-200/50 px-6 rounded-xl transition-all active:scale-95">
-            Guardar Cita
-          </Button>
+        <div className="flex justify-between items-center mt-8">
+          <div className="flex gap-2">
+            {(mode === 'edit' || mode === 'view') && (
+              <>
+                <Button variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50 font-semibold text-xs h-9">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Historial Clínico
+                </Button>
+                <Button variant="outline" className="text-purple-600 border-purple-200 hover:bg-purple-50 font-semibold text-xs h-9">
+                  <Activity className="w-4 h-4 mr-2" />
+                  Antecedentes
+                </Button>
+              </>
+            )}
+          </div>
+          <div className="flex gap-3">
+            <Button
+              variant="ghost"
+              onClick={onClose}
+              className="hover:bg-slate-200/50 text-slate-700 font-semibold"
+            >
+              {mode === 'view' ? 'Cerrar' : 'Cancelar'}
+            </Button>
+            {mode !== 'view' && (
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm shadow-blue-200/50 px-6 rounded-xl transition-all active:scale-95">
+                {mode === 'create' ? 'Guardar Cita' : 'Actualizar Cita'}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>,
