@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Plus, User, CalendarCheck, Calendar, Filter, Printer, Edit2, Eye, ChevronLeft, ChevronRight, Receipt, FileImage, CalendarX, XCircle } from "lucide-react"
+import { Plus, Calendar, Filter, Printer, Edit2, ChevronLeft, ChevronRight, Receipt, FileImage, CalendarX, XCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Table,

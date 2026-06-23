@@ -57,7 +57,7 @@ export default function NuevaCitaModal({
         <div className="space-y-5">
           {/* Nombre */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-700">
               Nombre completo
             </label>
             <div className="relative">
@@ -66,7 +66,7 @@ export default function NuevaCitaModal({
                 defaultValue={initialData?.patient?.name || ""}
                 readOnly={mode === 'view'}
                 placeholder="Escriba aqui"
-                className="pl-9 bg-white/70 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl"
+                className="pl-9 bg-white/70 dark:bg-white/70 text-slate-700 dark:text-slate-700 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl"
               />
             </div>
           </div>
@@ -74,7 +74,7 @@ export default function NuevaCitaModal({
           <div className="grid grid-cols-2 gap-4">
             {/* Teléfono */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-700">
                 Teléfono
               </label>
               <div className="relative">
@@ -87,14 +87,14 @@ export default function NuevaCitaModal({
                   onChange={(e) => {
                     if (mode !== 'view') e.target.value = e.target.value.replace(/\D/g, "");
                   }}
-                  className="pl-9 bg-white/70 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl" 
+                  className="pl-9 bg-white/70 dark:bg-white/70 text-slate-700 dark:text-slate-700 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl" 
                 />
               </div>
             </div>
 
             {/* Correo electrónico */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-700">
                 Correo electrónico
               </label>
               <div className="relative">
@@ -103,7 +103,7 @@ export default function NuevaCitaModal({
                   placeholder="ejemplo@correo.com"
                   type="email"
                   readOnly={mode === 'view'}
-                  className="pl-9 bg-white/70 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl"
+                  className="pl-9 bg-white/70 dark:bg-white/70 text-slate-700 dark:text-slate-700 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl"
                 />
               </div>
             </div>
@@ -112,10 +112,10 @@ export default function NuevaCitaModal({
           <div className="grid grid-cols-2 gap-4">
             {/* Género */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Género</label>
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-700">Género</label>
               <select 
                 disabled={mode === 'view'}
-                className="w-full h-11 px-3 bg-white/70 border border-white/40 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 transition-colors rounded-xl text-sm text-slate-700 shadow-sm appearance-none disabled:opacity-70 disabled:cursor-not-allowed">
+                className="w-full h-11 px-3 bg-white/70 dark:bg-white/70 border border-white/40 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 transition-colors rounded-xl text-sm text-slate-700 dark:text-slate-700 shadow-sm appearance-none disabled:opacity-70 disabled:cursor-not-allowed">
                 <option value="">Seleccione</option>
                 <option value="m">Masculino</option>
                 <option value="f">Femenino</option>
@@ -125,7 +125,7 @@ export default function NuevaCitaModal({
 
             {/* Edad */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Edad</label>
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-700">Edad</label>
               <Input
                 placeholder="00"
                 type="number"
@@ -142,7 +142,7 @@ export default function NuevaCitaModal({
                     e.currentTarget.value = "0";
                   }
                 }}
-                className="bg-white/70 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl"
+                className="bg-white/70 dark:bg-white/70 text-slate-700 dark:text-slate-700 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl"
               />
             </div>
           </div>
@@ -150,7 +150,7 @@ export default function NuevaCitaModal({
           <div className="grid grid-cols-2 gap-4">
             {/* Fecha de la cita */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-700">
                 Fecha de la cita
               </label>
               <div className="relative">
@@ -159,26 +159,26 @@ export default function NuevaCitaModal({
                   placeholder="dd/mm/aaaa"
                   type="date"
                   readOnly={mode === 'view'}
-                  className="pl-9 bg-white/70 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl text-slate-700"
+                  className="pl-9 bg-white/70 dark:bg-white/70 text-slate-700 dark:text-slate-700 border-white/40 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 transition-colors h-11 shadow-sm rounded-xl"
                 />
               </div>
             </div>
 
             {/* Hora de la cita */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-700">
                 Hora de la cita
               </label>
-              <div className="flex items-center gap-1.5 px-3 bg-white/70 border border-white/40 rounded-xl h-11 shadow-sm focus-within:ring-1 focus-within:ring-blue-500/30 focus-within:border-blue-500 transition-colors">
+              <div className="flex items-center gap-1.5 px-3 bg-white/70 dark:bg-white/70 border border-white/40 rounded-xl h-11 shadow-sm focus-within:ring-1 focus-within:ring-blue-500/30 focus-within:border-blue-500 transition-colors">
                 <Clock className="w-4 h-4 text-slate-400 shrink-0" />
-                <div className="flex items-center gap-1 text-slate-700 font-medium">
+                <div className="flex items-center gap-1 text-slate-700 dark:text-slate-700 font-medium">
                   <input
                     type="text"
                     placeholder="12"
                     maxLength={2}
                     readOnly={mode === 'view'}
                     defaultValue={initialData?.time ? initialData.time.split(':')[0] : ''}
-                    className="w-6 text-center bg-transparent border-none outline-none focus:ring-0 p-0 text-sm font-medium"
+                    className="w-6 text-center bg-transparent border-none outline-none focus:ring-0 p-0 text-sm font-medium text-slate-700 dark:text-slate-700"
                     onChange={(e) => {
                       let val = e.target.value.replace(/\D/g, "");
                       if (val && Number(val) > 12) val = "12";
@@ -205,7 +205,7 @@ export default function NuevaCitaModal({
                     maxLength={2}
                     readOnly={mode === 'view'}
                     defaultValue={initialData?.time ? initialData.time.split(':')[1].split(' ')[0] : ''}
-                    className="w-6 text-center bg-transparent border-none outline-none focus:ring-0 p-0 text-sm font-medium"
+                    className="w-6 text-center bg-transparent border-none outline-none focus:ring-0 p-0 text-sm font-medium text-slate-700 dark:text-slate-700"
                     onChange={(e) => {
                       let val = e.target.value.replace(/\D/g, "");
                       if (val && Number(val) > 59) val = "59";
@@ -224,7 +224,7 @@ export default function NuevaCitaModal({
                 <select 
                   disabled={mode === 'view'}
                   defaultValue={initialData?.time ? initialData.time.split(' ')[1] : 'AM'}
-                  className="bg-transparent border-none outline-none text-xs font-semibold text-slate-600 cursor-pointer pr-1 focus:ring-0 disabled:opacity-70 disabled:cursor-not-allowed">
+                  className="bg-transparent border-none outline-none text-xs font-semibold text-slate-600 dark:text-slate-600 cursor-pointer pr-1 focus:ring-0 disabled:opacity-70 disabled:cursor-not-allowed">
                   <option value="AM">AM</option>
                   <option value="PM">PM</option>
                 </select>
@@ -234,14 +234,14 @@ export default function NuevaCitaModal({
 
           {/* Notas */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-700">
               Notas / Motivo de la cita
             </label>
             <textarea
               placeholder="Describa el motivo de la consulta o notas adicionales..."
               readOnly={mode === 'view'}
               defaultValue={initialData?.procedure || ""}
-              className="w-full p-3 bg-white/70 border border-white/40 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 transition-colors rounded-xl text-sm text-slate-700 shadow-sm min-h-[100px] resize-none"
+              className="w-full p-3 bg-white/70 dark:bg-white/70 border border-white/40 focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500 transition-colors rounded-xl text-sm text-slate-700 dark:text-slate-700 shadow-sm min-h-[100px] resize-none"
             />
           </div>
         </div>

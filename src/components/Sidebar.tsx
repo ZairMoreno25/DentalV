@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { ClipboardList, Users, BriefcaseMedical, Building2, Settings, LayoutDashboard, BarChart3, ShoppingCart, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -14,6 +14,12 @@ const navItems = [
 
 export default function Sidebar() {
   const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated")
+    navigate("/login")
+  }
 
   return (
     <div className="w-[260px] h-screen border-r bg-white dark:bg-[#1E222A] dark:border-slate-800 flex flex-col justify-between shrink-0 transition-colors">
@@ -68,7 +74,8 @@ export default function Sidebar() {
           Ajustes
         </Link>
         <button
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors text-red-600 hover:bg-red-50 dark:text-red-500 dark:hover:bg-red-900/20 text-left"
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors text-red-600 hover:bg-red-50 dark:text-red-500 dark:hover:bg-red-900/20 text-left w-full animate-pulse-subtle"
         >
           <LogOut className="w-5 h-5" />
           Cerrar Sesión
