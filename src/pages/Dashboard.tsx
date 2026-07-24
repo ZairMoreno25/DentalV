@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Plus, Calendar, Filter, Printer, Edit2, ChevronLeft, ChevronRight, Receipt, FileImage, CalendarX, XCircle } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Plus, Calendar, Filter, Printer, Edit2, ChevronLeft, ChevronRight, Receipt, FileImage, CalendarX, XCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -12,55 +12,55 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import StatusBadge from "@/components/StatusBadge"
 import NuevaCitaModal from "@/components/NuevaCitaModal"
+import { cancelarCita, listarCitas, type Cita } from "@/lib/citas"
 
-const agendaData = [
-  {
-    time: "09:00 AM",
-    patient: {
-      name: "Marco Antonio Solís",
-      id: "#4529",
-      initials: "MA",
-      color: "bg-emerald-100 text-emerald-700"
-    },
-    procedure: "Endodoncia",
-    doctor: "Dr. Smith",
-    status: "CONFIRMADO"
-  },
-  {
-    time: "10:30 AM",
-    patient: {
-      name: "Elena Poniatowska",
-      id: "#3182",
-      initials: "EP",
-      color: "bg-blue-100 text-blue-700"
-    },
-    procedure: "Limpieza General",
-    doctor: "Dr. Smith",
-    status: "EN ESPERA"
-  },
-  {
-    time: "12:00 PM",
-    patient: {
-      name: "Roberto Juarroz",
-      id: "#8901",
-      initials: "RJ",
-      color: "bg-red-100 text-red-700"
-    },
-    procedure: "Ortodoncia",
-    doctor: "Dra. Garcia",
-    status: "CANCELADO"
-  }
-]
+function formatTime(time: string) {
+  const [hourText, minutes] = time.split(":")
+  const hour = Number(hourText)
+  return `${String(hour % 12 || 12).padStart(2, "0")}:${minutes} ${hour >= 12 ? "PM" : "AM"}`
+}
+
+function initials(name: string) {
+  return name.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()
+}
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create')
-  const [selectedAppointment, setSelectedAppointment] = useState<any>(null)
+  const [selectedAppointment, setSelectedAppointment] = useState<Cita | null>(null)
+  const [agendaData, setAgendaData] = useState<Cita[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [loadError, setLoadError] = useState("")
 
-  const openModal = (mode: 'create' | 'edit' | 'view', data?: any) => {
+  useEffect(() => {
+    listarCitas()
+      .then(setAgendaData)
+      .catch(() => setLoadError("No fue posible cargar las citas. Verifique que el backend esté activo."))
+      .finally(() => setIsLoading(false))
+  }, [])
+
+  const openModal = (mode: 'create' | 'edit' | 'view', data?: Cita) => {
     setModalMode(mode);
     setSelectedAppointment(data || null);
     setIsModalOpen(true);
+  }
+
+  const handleSaved = (saved: Cita) => {
+    setLoadError("")
+    setAgendaData((current) => {
+      const exists = current.some((cita) => cita.id === saved.id)
+      const next = exists ? current.map((cita) => cita.id === saved.id ? saved : cita) : [...current, saved]
+      return next.sort((a, b) => `${a.fecha}${a.hora}`.localeCompare(`${b.fecha}${b.hora}`))
+    })
+  }
+
+  const handleCancel = async (cita: Cita) => {
+    if (!window.confirm(`¿Desea cancelar la cita de ${cita.nombre_paciente}?`)) return
+    try {
+      handleSaved(await cancelarCita(cita.id))
+    } catch {
+      setLoadError("No fue posible cancelar la cita.")
+    }
   }
 
   return (
@@ -70,13 +70,16 @@ export default function Dashboard() {
         onClose={() => setIsModalOpen(false)} 
         mode={modalMode}
         initialData={selectedAppointment}
+        onSaved={handleSaved}
       />
       
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Panel Principal</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm font-medium">Bienvenido de nuevo, Dr. Smith. Tienes 8 citas para hoy.</p>
+          <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm font-medium">
+            Tienes {agendaData.length} {agendaData.length === 1 ? "cita programada" : "citas programadas"}.
+          </p>
         </div>
         <Button 
           onClick={() => openModal('create')}
@@ -92,7 +95,7 @@ export default function Dashboard() {
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3">
             <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            <h2 className="text-lg font-bold text-slate-800 dark:text-white">Agenda de Hoy</h2>
+            <h2 className="text-lg font-bold text-slate-800 dark:text-white">Agenda de Citas</h2>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" className="h-9 w-9 p-0 text-slate-600 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-800">
@@ -116,38 +119,61 @@ export default function Dashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {agendaData.map((item, index) => (
-              <TableRow key={index} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 dark:border-slate-800 transition-colors group">
-                <TableCell className="font-bold text-slate-800 dark:text-white text-sm py-4">{item.time}</TableCell>
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={6} className="h-32 text-center text-slate-500">
+                  <Loader2 className="w-5 h-5 animate-spin inline mr-2" />Cargando citas...
+                </TableCell>
+              </TableRow>
+            )}
+            {!isLoading && loadError && (
+              <TableRow>
+                <TableCell colSpan={6} className="h-24 text-center text-red-600">{loadError}</TableCell>
+              </TableRow>
+            )}
+            {!isLoading && !loadError && agendaData.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={6} className="h-32 text-center text-slate-500">
+                  No hay citas registradas. Use “Nueva Cita” para agregar la primera.
+                </TableCell>
+              </TableRow>
+            )}
+            {agendaData.map((item) => (
+              <TableRow key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 dark:border-slate-800 transition-colors group">
+                <TableCell className="font-bold text-slate-800 dark:text-white text-sm py-4">
+                  <div>{formatTime(item.hora)}</div>
+                  <div className="text-xs font-medium text-slate-400">{item.fecha}</div>
+                </TableCell>
                 <TableCell className="py-4">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">
-                      <AvatarFallback className={`font-semibold ${item.patient.color} text-xs`}>
-                        {item.patient.initials}
+                      <AvatarFallback className="font-semibold bg-blue-100 text-blue-700 text-xs">
+                        {initials(item.nombre_paciente)}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-bold text-slate-800 dark:text-slate-200 leading-tight">{item.patient.name}</p>
+                      <p className="text-sm font-bold text-slate-800 dark:text-slate-200 leading-tight">{item.nombre_paciente}</p>
+                      <p className="text-xs text-slate-400 mt-1">{item.telefono}</p>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell className="text-sm font-medium text-slate-600 py-4">
                   <span className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-blue-400 text-xs font-semibold">
-                    {item.procedure}
+                    {item.motivo || "Consulta general"}
                   </span>
                 </TableCell>
                 <TableCell className="text-sm font-medium text-slate-600 dark:text-slate-300 py-4">
-                  {item.doctor}
+                  {item.doctor || "Sin asignar"}
                 </TableCell>
                 <TableCell className="py-4">
-                  <StatusBadge status={item.status as any} />
+                  <StatusBadge status={item.estado_display as any} />
                 </TableCell>
                 <TableCell className="text-right py-4 pr-6">
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" size="icon" onClick={() => openModal('edit', item)} className="h-8 w-8 text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800">
                       <Edit2 className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:bg-red-50 dark:hover:bg-slate-800">
+                    <Button variant="ghost" size="icon" onClick={() => handleCancel(item)} disabled={item.estado === "cancelado"} className="h-8 w-8 text-red-500 hover:bg-red-50 dark:hover:bg-slate-800">
                       <XCircle className="w-4 h-4" />
                     </Button>
                   </div>
@@ -159,7 +185,9 @@ export default function Dashboard() {
         
         {/* Footer Link / Date Selector */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/30">
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Mostrando 3 de 12 citas programadas</p>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+            Mostrando {agendaData.length} {agendaData.length === 1 ? "cita programada" : "citas programadas"}
+          </p>
           <div className="flex items-center gap-4">
             <div className="flex items-center bg-white dark:bg-[#1E222A] border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
               <Button variant="ghost" size="icon" className="h-9 w-9 rounded-none hover:bg-slate-100 dark:hover:bg-slate-800">

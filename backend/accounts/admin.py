@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Clinica, Usuario
+from .models import Cita, Clinica, Usuario
 
 class UsuarioAdmin(UserAdmin):
     model = Usuario
@@ -16,3 +16,11 @@ class UsuarioAdmin(UserAdmin):
 
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Clinica)
+
+
+@admin.register(Cita)
+class CitaAdmin(admin.ModelAdmin):
+    list_display = ('nombre_paciente', 'fecha', 'hora', 'doctor', 'estado')
+    list_filter = ('estado', 'fecha')
+    search_fields = ('nombre_paciente', 'telefono', 'correo', 'doctor')
+    ordering = ('fecha', 'hora')

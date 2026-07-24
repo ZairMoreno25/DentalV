@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from accounts.views import login_view
+from accounts.views import cita_detail_view, citas_view, login_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/login/', login_view, name='login'),
+    path('api/citas/', citas_view, name='citas'),
+    path('api/citas/<uuid:cita_id>/', cita_detail_view, name='cita-detail'),
 ]
